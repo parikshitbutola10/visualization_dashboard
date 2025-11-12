@@ -1,85 +1,90 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Filters from "./Filters";
-import Navbar from "./Navbar";
-import IntensityChart from "./Charts/IntensityChart";
-import LikelihoodChart from "./Charts/LikelihoodChart";
-import RelevanceChart from "./Charts/RelevanceChart";
-import YearlyTrendChart from "./Charts/YearlyTrendChart";
-import CountryDistributionChart from "./Charts/CountryDistributionChart";
-import "../App.css";
+  import React, { useEffect, useState } from "react";
+  import axios from "axios";
+  import Filters from "./Filters";
+  import Navbar from "./Navbar";
+  import IntensityChart from "./Charts/IntensityChart";
+  import LikelihoodChart from "./Charts/LikelihoodChart";
+  import RelevanceChart from "./Charts/RelevanceChart";
+  import YearlyTrendChart from "./Charts/YearlyTrendChart";
+  import CountryDistributionChart from "./Charts/CountryDistributionChart";
+  import "../App.css";
 
-const Dashboard = () => {
-  const [data, setData] = useState([]);
-  const [filtered, setFiltered] = useState([]);
-  const [darkMode, setDarkMode] = useState(false);
-  const [filters, setFilters] = useState({
-    end_year: "",
-    topic: "",
-    sector: "",
-    region: "",
-    pestle: "",
-    source: "",
-    swot: "",
-    country: "",
-    city: ""
-  });
+  <div className="dashboard-decor">
+  <img src="/assets/top-left.svg" alt="Decor Left" className="decor-left" />
+  <img src="/assets/top-right.svg" alt="Decor Right" className="decor-right" />
+</div>
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/items")
-      .then(res => {
-        setData(res.data);
-        setFiltered(res.data);
-      })
-      .catch(err => console.error("API Fetch Error:", err));
-  }, []);
-
-  useEffect(() => {
-    let filteredData = data;
-    Object.keys(filters).forEach(key => {
-      if (filters[key]) {
-        filteredData = filteredData.filter(item =>
-          item[key]?.toLowerCase().includes(filters[key].toLowerCase())
-        );
-      }
+  const Dashboard = () => {
+    const [data, setData] = useState([]);
+    const [filtered, setFiltered] = useState([]);
+    const [darkMode, setDarkMode] = useState(false);
+    const [filters, setFilters] = useState({
+      end_year: "",
+      topic: "",
+      sector: "",
+      region: "",
+      pestle: "",
+      source: "",
+      swot: "",
+      country: "",
+      city: ""
     });
-    setFiltered(filteredData);
-  }, [filters, data]);
 
-  const toggleDarkMode = () => setDarkMode(!darkMode);
+    useEffect(() => {
+      axios.get("https://visualization-dashboard-backend-01w0.onrender.com/api/items")
+        .then(res => {
+          setData(res.data);
+          setFiltered(res.data);
+        })
+        .catch(err => console.error("API Fetch Error:", err));
+    }, []);
 
-  return (
-    <div className={darkMode ? "dark-mode" : ""}>
-      <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+    useEffect(() => {
+      let filteredData = data;
+      Object.keys(filters).forEach(key => {
+        if (filters[key]) {
+          filteredData = filteredData.filter(item =>
+            item[key]?.toLowerCase().includes(filters[key].toLowerCase())
+          );
+        }
+      });
+      setFiltered(filteredData);
+    }, [filters, data]);
 
-      <div className="dashboard-container">
-        <Filters filters={filters} setFilters={setFilters} data={data} />
+    const toggleDarkMode = () => setDarkMode(!darkMode);
 
-        <div className="charts-grid">
-          <div className="chart-card">
-            <div className="chart-title">Intensity by Topic</div>
-            <IntensityChart data={filtered} />
-          </div>
-          <div className="chart-card">
-            <div className="chart-title">Likelihood by Region</div>
-            <LikelihoodChart data={filtered} />
-          </div>
-          <div className="chart-card">
-            <div className="chart-title">Relevance by Sector</div>
-            <RelevanceChart data={filtered} />
-          </div>
-          <div className="chart-card">
-            <div className="chart-title">Yearly Trend (Intensity)</div>
-            <YearlyTrendChart data={filtered} />
-          </div>
-          <div className="chart-card">
-            <div className="chart-title">Country Distribution</div>
-            <CountryDistributionChart data={filtered} />
+    return (
+      <div className={darkMode ? "dark-mode" : ""}>
+        <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+
+        <div className="dashboard-container">
+          <Filters filters={filters} setFilters={setFilters} data={data} />
+
+          <div className="charts-grid">
+            <div className="chart-card">
+              <div className="chart-title">Intensity by Topic</div>
+              <IntensityChart data={filtered} />
+            </div>
+            <div className="chart-card">
+              <div className="chart-title">Likelihood by Region</div>
+              <LikelihoodChart data={filtered} />
+            </div>
+            <div className="chart-card">
+              <div className="chart-title">Relevance by Sector</div>
+              <RelevanceChart data={filtered} />
+            </div>
+            <div className="chart-card">
+              <div className="chart-title">Yearly Trend (Intensity)</div>
+              <YearlyTrendChart data={filtered} />
+            </div>
+            <div className="chart-card">
+              <div className="chart-title">Country Distribution</div>
+              <CountryDistributionChart data={filtered} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
-export default Dashboard;
+  export default Dashboard;

@@ -1,8 +1,7 @@
-
 import React, { useEffect, useRef } from "react";
 import * as d3 from "d3";
 
-const YearlyTrendCharts = ({ data }) => {
+const IntensityChart = ({ data }) => {
   const svgRef = useRef();
 
   useEffect(() => {
@@ -48,10 +47,10 @@ const YearlyTrendCharts = ({ data }) => {
 
   return (
     <div>
-      <h3>📈 Average Intensity by Year</h3>
+      <h3>Average Intensity by Topic</h3>
       <svg ref={svgRef} width={400} height={250}></svg>
     </div>
   );
 };
 
-export default YearlyTrendCharts;
+export default IntensityChart;
